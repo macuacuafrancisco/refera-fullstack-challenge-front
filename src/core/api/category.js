@@ -1,8 +1,14 @@
 import api from '../utils/api';
+import axios from "axios";
  
 export const getCategories= async()=>  {
     try {
-        const res = await api.get('/category');       
+        const baseURL = "http://localhost:5000/api/categories";
+    
+       const result = await  axios.get(baseURL);
+
+       console.log(result.data);
+       
     } catch (error) {              
     }    
 }
@@ -11,7 +17,7 @@ export const getCategories= async()=>  {
 export const getCategory= async(id)=>  {
 
     try {
-        const res = await api.get(`/category/${id}`);
+        const res = await api.get(`/categories/${id}`);
     } catch (err) {            
     }    
 }
@@ -19,7 +25,7 @@ export const getCategory= async(id)=>  {
 export const createCategory= async(props)=>  {
 
     try {
-        const res = await api.post('/category', props.values);
+        const res = await api.post('/categories', props.values);
     } catch (error) {         
     }    
 }
@@ -27,14 +33,14 @@ export const createCategory= async(props)=>  {
 export const deleteCategory = async(id) => async (dispatch)=>{
   
     try {
-        const res = await api.delete(`/category/${id}`)
+        const res = await api.delete(`/categories/${id}`)
     } catch (error) {
     }
 }
 
 export const updateCategory= async(id, props)=>  {
     try {
-        const res = await api.put(`/category/${id}`, props.values);
+        const res = await api.put(`/categories/${id}`, props.values);
     } catch (error) {
        
     }    
