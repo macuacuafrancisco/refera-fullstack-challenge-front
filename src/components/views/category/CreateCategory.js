@@ -1,6 +1,8 @@
 import React, {  Fragment, useState } from 'react';
-import {createCategory} from '../../api/category'
-import {Link} from 'react-router-dom'
+import {createCategory} from '../../../redux/actions/category'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {Link, useHistory} from 'react-router-dom'
 
 
 const CreateCategory = ({
@@ -8,7 +10,7 @@ const CreateCategory = ({
 })=> {
 
    const [values, setValues]= useState();
-
+   const history=useHistory()
 
    const handleChange = (e)=>{
        const name = e.target.name;
@@ -21,7 +23,7 @@ const CreateCategory = ({
                 <strong>Create a Category</strong>
                 <p/>
                 <p/>
-                <Link to={`/category`}>Back</Link>
+                <Link to={`/categories`}>Back</Link>
 
                 <form
                    onSubmit={e=>{                
@@ -30,36 +32,17 @@ const CreateCategory = ({
                                     values
                                 })
                                 setValues('');
-                            
+                                history.push('/categories');
                                 window.location.reload() 
                             }}>   
                  <div>
                         <label>
-                                name:<br/>
-                                <input type="text" name="name" onChange={handleChange} />
+                                DESCRIPTION:<br/>
+                                <input type="text" name="description" onChange={handleChange} />
                         </label> 
                    </div> 
 
-                   <div>
-                        <label>
-                                email:<br/>
-                                <input type="text" name="email"  onChange={handleChange}/>
-                        </label> 
-                   </div>
-
-                   <div>
-                        <label>
-                                phone:<br/>
-                                <input type="text" name="phone"  onChange={handleChange}/>
-                        </label> 
-                   </div>
-
-                   <div>
-                        <label>
-                                address:<br/>
-                                <input type="text" name="address"  onChange={handleChange}/>
-                        </label> 
-                   </div> 
+                                              
                 
 
                    <div>
@@ -73,5 +56,12 @@ const CreateCategory = ({
         )
     }
 
+CreateCategory.propTypes = {
+    createCategory: PropTypes.func.isRequired,   
+}
 
-export default CreateCategory;
+const mapStateToProps = (state)=>({
+   
+})
+
+export default connect(null, {createCategory})(CreateCategory);
