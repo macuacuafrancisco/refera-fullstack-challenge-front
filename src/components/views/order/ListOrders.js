@@ -32,7 +32,8 @@ const ListOrders = ({
                                 <tr>
                                 <th scope="col">Id</th>
                                 <th scope="col">Category</th>      
-                                <th scope="col">Contact</th>      
+                                <th scope="col">Contact Name</th>    
+                                <th scope="col">Contact Phone</th>     
                                 <th scope="col">Agency</th>  
                                 <th scope="col">Company</th>  
                                 <th scope="col">Dealine</th>  
@@ -41,16 +42,17 @@ const ListOrders = ({
                             <tbody>
                                 {
                                     orders!==null && orders.map((item)=>{                          
-                                        return<tr key={item._id}>
-                                            <td>{item._id}</td>                                          
-                                            <td>{item.category.description}</td>
-                                            <td>{item.contact}</td>
-                                            <td>{item.agency}</td>
-                                            <td>{item.company}</td>
-                                            <td>{item.deadline}</td>
+                                        return<tr onClick={()=>{console.log("Visualize : ",item._id)}} key={item._id}>
+                                                    <td>{item._id}</td>                                          
+                                                    <td>{item.category.description}</td>
+                                                    <td>{item.contactName}</td>
+                                                    <td>{item.contactPhone}</td>
+                                                    <td>{item.agency}</td>
+                                                    <td>{item.company}</td>
+                                                    <td>{item.deadline}</td>
                                         
-                                            <td><Link to={`/orders/${item._id}/edit`}>Update</Link></td>
-                                            <td><button onClick={()=>{deleteOrder(item._id); window.location.reload(); }}>Delete</button></td> 
+                                                    <td><Link to={`/orders/${item._id}/edit`}>Update</Link></td>
+                                                    <td><button onClick={()=>{deleteOrder(item._id); window.location.reload(); }}>Delete</button></td> 
                                         </tr> 
                                     })
                                 }                                                   

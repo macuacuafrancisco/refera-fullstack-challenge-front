@@ -1,4 +1,5 @@
 import React, {  Fragment, useState, useEffect } from 'react';
+import {getCategories} from '../../../redux/actions/category'
 import {getOrder, updateOrder} from '../../../redux/actions/order'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,10 +10,15 @@ const UpdateOrder = ({
     getOrder,
     updateOrder,   
     order :{order, loading},
-    
+    getCategories,
+    category : {categories}
 })=> {
     const { id } = useParams();
    
+    useEffect(()=>{
+        getCategories();   
+     },[getCategories])
+
    useEffect(()=>{
         getOrder(id);
    },[])
@@ -55,14 +61,44 @@ const UpdateOrder = ({
                         window.location.reload() 
                     }}>   
         
-         <div>
-            <label>
-                    DESCRIPTION:<br/>
-                    <input type="text" name="description" onChange={handleChange}  value={values.description} 
-                    /><br/>
-            </label>  
-         </div>        
-                         
+        <div>
+                        <label>
+                                CATEGORY:<br/>                               
+                                <select name="category" onChange={handleChange}>
+                                    <option >{values.category}</option>
+                                    {
+                                        categories.map((item)=>{
+                                            return <option value={item._id} key={item._id}> {item.description} </option>
+                                        })
+                                    }                                
+                                </select>
+                        </label> 
+                      
+                        <label>
+                                CONTACT NAME:<br/>
+                                <input type="text" name="contactName" onChange={handleChange} value={values.contactName} />
+                        </label> 
+
+                        <label>
+                                CONTACT PHONE:<br/>
+                                <input type="text" name="contactPhone" onChange={handleChange} value={values.contactPhone} />
+                        </label> 
+
+                        <label>
+                                AGENCY:<br/>
+                                <input type="text" name="agency" onChange={handleChange} value={values.agency} />
+                        </label> 
+                        <label>
+                                COMPANY:<br/>
+                                <input type="text" name="company" onChange={handleChange} value={values.company} />
+                        </label> 
+                        <label>
+                                DEADLINE:<br/>
+                                <input type="text" name="deadline" onChange={handleChange} value={values.deadline} />
+                        </label> 
+                   </div> 
+
+
 
            <div>
                  <input type="submit" className="btn btn-dark my-1" value="Update Order " />  
@@ -79,13 +115,15 @@ const UpdateOrder = ({
 }
 
 UpdateOrder.propTypes = {
-    getOrder: PropTypes.func.isRequired,   
+    getCategories: PropTypes.func.isRequired,   
+     getOrder: PropTypes.func.isRequired,  
     updateOrder: PropTypes.func.isRequired,   
     order: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state)=>({
-   order: state.order
+   order: state.order,
+   category: state.category
 })
 
-export default connect(mapStateToProps, {getOrder,updateOrder})(UpdateOrder);
+export default connect(mapStateToProps, {getOrder,updateOrder, getCategories})(UpdateOrder);

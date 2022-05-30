@@ -54,14 +54,17 @@ const CreateOrder = ({
                                     }                                
                                 </select>
                         </label> 
+                     
                         <label>
-                                DESCRIPTION:<br/>
-                                <input type="text" name="description" onChange={handleChange} />
+                                CONTACT NAME:<br/>
+                                <input type="text" name="contactName" onChange={handleChange} />
                         </label> 
+
                         <label>
-                                CONTACT:<br/>
-                                <input type="text" name="contact" onChange={handleChange} />
+                                CONTACT PHONE:<br/>
+                                <input type="text" name="contactPhone" onChange={handleChange} />
                         </label> 
+
                         <label>
                                 AGENCY:<br/>
                                 <input type="text" name="agency" onChange={handleChange} />
