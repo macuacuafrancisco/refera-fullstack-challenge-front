@@ -6,6 +6,14 @@ export const DELETE_CATEGORY='DELETE_CATEGORY';
 export const CATEGORIES_ERROR = 'CATEGORIES_ERROR';
 export const CATEGORY_ERROR='CATEGORY_ERROR';
 
+export const GET_ORDERS = 'GET_ORDERS';
+export const GET_ORDER='GET_ORDER';
+export const CREATE_ORDER='CREATE_ORDER';
+export const UPDATE_ORDER='UPDATE_ORDER';
+export const DELETE_ORDER='DELETE_ORDER';
+export const ORDERS_ERROR = 'ORDERS_ERROR';
+export const ORDER_ERROR='ORDER_ERROR';
+
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 

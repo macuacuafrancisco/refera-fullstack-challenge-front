@@ -25,7 +25,7 @@ const ListCategories = ({
             ) : (   
                     <>
                         <strong>Categories</strong>    
-                        <td><Link to={`/categories/create`}>New Category</Link></td>
+                        <p/><Link to={`/categories/create`}>New Category</Link>
 
                         <table className="table table-hover">
                             <thead>
