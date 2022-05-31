@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import {getOrders,  deleteOrder, getOrder, updateOrder, showOrderModal} from '../../../redux/actions/order'
+import {getOrders,  deleteOrder, getOrder, updateOrder,createOrder, showOrderModal} from '../../../redux/actions/order'
 import {getCategories} from '../../../redux/actions/category'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, useHistory} from 'react-router-dom'
 import Spinner from '../shared/Spinner';
 import { Button, Modal } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {Link, useHistory} from 'react-router-dom'
 
 const ListOrders = ({
     getOrders, 
@@ -17,15 +17,25 @@ const ListOrders = ({
     getCategories,
     category : {categories},
     updateOrder,
+    createOrder,
     showOrderModal,
 })=> {
-    const [startDate, setStartDate] = useState(new Date());
-    
+    const history=useHistory()
+
     const [showOrder, setShowOrder] = useState(false);
     const [showEditOrder, setShowEditOrder] = useState(false);
 
     const handleCloseOrder = () => setShowOrder(false);
     const handleCloseEditOrder = () => setShowEditOrder(false);
+
+    const handlePersisteOrder =() => {
+        executeUpdate({
+            values
+        })                                               
+        setValues('');
+        history.push('/orders');
+        window.location.reload() 
+    }
 
     const handleShowOrder = (id) => {
         getOrder(id)
@@ -39,9 +49,14 @@ const ListOrders = ({
     };
 
     useEffect(()=>{
+        setValues(order);   
+        setStartDate(new Date(order.deadline))
+     },[getOrder, order])
+
+    useEffect(()=>{
         getCategories();   
      },[getCategories])
-
+  
      const handleChange = (e)=>{
         const name = e.target.name;
         setValues({...values, [name] : e.target.value}) ;
@@ -49,8 +64,17 @@ const ListOrders = ({
 
     const [values, setValues]= useState(order);
 
+    const [startDate, setStartDate] = useState(new Date(values.deadline));
+    
+
     const executeUpdate = ( values)=>{
-        updateOrder(order._id,values )        
+        if(order!==null){
+            updateOrder(order._id,values )
+        }else{
+            createOrder({values }) 
+            setValues(''); 
+        }       
+     
      }
  
            
@@ -58,12 +82,14 @@ const ListOrders = ({
         getOrders();   
      },[getOrders, deleteOrder])
 
- /*    const  handleUpdate=(id)=>{
-            setShowOrder(false);     
-            window.location=`/orders/${id}/edit`;
-     } */
+
     const handleNewOrder =()=>{
-        window.location=`/orders/create`;
+         setShowEditOrder(true);
+     }
+
+     const handleDataChange = (date)=>{
+        setStartDate(date)
+        values.deadline=startDate;
      }
            
      return( 
@@ -125,7 +151,7 @@ const ListOrders = ({
                                                        {order.deadline}                                 
                               </Modal.Body>
                             <Modal.Footer>                        
-                            <Button variant="warning" onClick={handleShowEditOrder}>
+                            <Button variant="warning" onClick={()=>{handleShowEditOrder(order._id)}}>
                                 Update
                             </Button>
                             <Button variant="danger" onClick={()=>{deleteOrder(order._id); window.location.reload(); }}>
@@ -143,15 +169,7 @@ const ListOrders = ({
                             <Modal.Title>View Order</Modal.Title>
                             </Modal.Header>
                               <Modal.Body>   
-                                <form 
-                                onSubmit={e=>{                
-                                                e.preventDefault();
-                                                executeUpdate({
-                                                    values
-                                                })                                               
-                                                window.location.reload() 
-                                            }}>   
-                                
+                                                               
                                 <div>
                                                 <label>
                                                         CATEGORY:<br/>                               
@@ -183,19 +201,16 @@ const ListOrders = ({
                                                         COMPANY:<br/>
                                                         <input type="text" name="company" onChange={handleChange} value={values.company} />
                                                 </label> 
-                                                <label>
-                                                        DEADLINE:<br/>
-                                                        <input  type="text" name="deadline" onChange={handleChange} value={values.deadline} />
-                                                </label> 
+                                               
                                                 <label>
                                                        DEADLINE:<br/>
-                                                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                                                        <DatePicker selected={startDate} onChange={(date) => handleDataChange(date)} />
                                                 </label>
                                         </div>                              
-                                </form>        
+                               
                                 </Modal.Body>
                                                     <Modal.Footer>                                                   
-                                                    <Button variant="primary" onClick={handleCloseEditOrder}>
+                                                    <Button variant="primary" onClick={handlePersisteOrder}>
                                                         Save
                                                     </Button>
                                                     <Button variant="secondary" onClick={handleCloseEditOrder}>
@@ -204,7 +219,8 @@ const ListOrders = ({
                                                     </Modal.Footer>
                                                 </Modal>   
                             </Fragment>
-        </Fragment>
+                            
+                     </Fragment>
          )  
     }
 
@@ -215,6 +231,7 @@ ListOrders.propTypes = {
     getOrder:  PropTypes.func.isRequired,  
     getCategories: PropTypes.func.isRequired,  
     updateOrder: PropTypes.func.isRequired,  
+    createOrder: PropTypes.func.isRequired,  
     showOrderModal:  PropTypes.func.isRequired,
     }
 
@@ -223,4 +240,4 @@ const mapStateToProps = (state)=>({
     category: state.category
 })
 
-export default connect(mapStateToProps, {getOrders,    getOrder,   deleteOrder, getCategories, updateOrder, showOrderModal})(ListOrders);
+export default connect(mapStateToProps, {getOrders,    getOrder,   deleteOrder, getCategories, updateOrder, createOrder, showOrderModal})(ListOrders);
