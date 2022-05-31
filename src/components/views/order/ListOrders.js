@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import {getOrders,  deleteOrder, getOrder, updateOrder,createOrder, showOrderModal} from '../../../redux/actions/order'
+import {getOrders,  deleteOrder, getOrder, updateOrder,createOrder} from '../../../redux/actions/order'
 import {getCategories} from '../../../redux/actions/category'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,7 +18,6 @@ const ListOrders = ({
     category : {categories},
     updateOrder,
     createOrder,
-    showOrderModal,
 })=> {
     const history=useHistory()
 
@@ -64,7 +63,7 @@ const ListOrders = ({
 
     const [values, setValues]= useState(order);
 
-    const [startDate, setStartDate] = useState(new Date(values.deadline));
+    const [startDate, setStartDate] = useState(new Date());
     
 
     const executeUpdate = ( values)=>{
@@ -84,10 +83,11 @@ const ListOrders = ({
 
 
     const handleNewOrder =()=>{
+         setValues('')   
          setShowEditOrder(true);
      }
 
-     const handleDataChange = (date)=>{
+     const handleDataChange = (date)=>{        
         setStartDate(date)
         values.deadline=startDate;
      }
@@ -219,7 +219,7 @@ const ListOrders = ({
                                                
                                                 <label>
                                                        DEADLINE:<br/>
-                                                        <DatePicker selected={startDate} onChange={(date) => handleDataChange(date)} />
+                                                        <DatePicker selected={values.deadline} onChange={(date) => handleDataChange(date)} />
                                                 </label>
                                         </div>                              
                                )} 
@@ -247,8 +247,7 @@ ListOrders.propTypes = {
     getOrder:  PropTypes.func.isRequired,  
     getCategories: PropTypes.func.isRequired,  
     updateOrder: PropTypes.func.isRequired,  
-    createOrder: PropTypes.func.isRequired,  
-    showOrderModal:  PropTypes.func.isRequired,
+    createOrder: PropTypes.func.isRequired 
     }
 
 const mapStateToProps = (state)=>({
@@ -256,4 +255,4 @@ const mapStateToProps = (state)=>({
     category: state.category
 })
 
-export default connect(mapStateToProps, {getOrders,    getOrder,   deleteOrder, getCategories, updateOrder, createOrder, showOrderModal})(ListOrders);
+export default connect(mapStateToProps, {getOrders,    getOrder,   deleteOrder, getCategories, updateOrder, createOrder})(ListOrders);
