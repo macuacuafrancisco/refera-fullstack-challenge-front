@@ -4,6 +4,7 @@ import {createOrder} from '../../../redux/actions/order'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {Link, useHistory} from 'react-router-dom'
+import { Button } from 'react-bootstrap';
 
 
 const CreateOrder = ({
@@ -27,10 +28,10 @@ const CreateOrder = ({
        
         return(
             <Fragment>
-                <strong>Create a Order</strong>
-                <p/>
-                <p/>
-                <Link to={`/orders`}>Back</Link>
+              
+                <Button variant="primary" onClick={()=>{window.location=`/orders`}}>
+                          Back
+                           </Button>
 
                 <form
                    onSubmit={e=>{                

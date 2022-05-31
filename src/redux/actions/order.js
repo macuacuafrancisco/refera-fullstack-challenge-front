@@ -1,5 +1,5 @@
 import api from '../../utils/api';
-import {GET_ORDERS, GET_ORDER, CREATE_ORDER, UPDATE_ORDER, DELETE_ORDER, ORDERS_ERROR, ORDER_ERROR} from './types'
+import {GET_ORDERS, GET_ORDER, CREATE_ORDER, UPDATE_ORDER, DELETE_ORDER,SHOW_ORDER_MODAL,ORDERS_ERROR, ORDER_ERROR} from './types'
 
  
 export const getOrders= ()=> async (dispatch) => {
@@ -88,4 +88,40 @@ export const updateOrder= (id, props)=> async (dispatch) => {
             payload : {status : error.response.status}
         })        
     }    
+}
+
+
+export const showOrderModal = (id, props)=> async (dispatch) => {
+    console.log("TRYNNA SHOW MODAL");
+    try {    
+        const res = await api.get(`/orders/${id}`);
+
+        dispatch({
+            type : GET_ORDER,    
+            payload : res.data  
+        });
+
+        dispatch({
+            type : SHOW_ORDER_MODAL,
+            payload : res.data  
+        })
+    } catch (error) {
+        dispatch({
+            type: ORDERS_ERROR,
+            payload : {status : error.response.status}
+        })        
+    }
+}
+
+export const closeOrderModal  = ()=> async (dispatch) => {
+    try {      
+        dispatch({
+            type : SHOW_ORDER_MODAL
+        })
+    } catch (error) {
+        dispatch({
+            type: ORDERS_ERROR,
+            payload : {status : error.response.status}
+        })        
+    }
 }

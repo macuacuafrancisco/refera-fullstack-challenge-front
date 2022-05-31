@@ -3,12 +3,15 @@ import {
     GET_ORDER,
     CREATE_ORDER,
     DELETE_ORDER,
+    SHOW_ORDER_MODAL,
+    CLOSE_ORDER_MODAL,
     ORDERS_ERROR,
     ORDER_ERROR
 } from '../actions/types'
 
 const initialState = {
     loading : true,
+    show:false,
     orders : [],
     order: '' ,
     error: {}
@@ -44,6 +47,22 @@ function orderReducer(state=initialState, action) {
                     orders: state.orders.filter((order)=>order._id !== payload),
                     loading:false
                 }
+            case SHOW_ORDER_MODAL :{
+                return{
+                    ...state,
+                    order: payload,
+                    loading:false,
+                    show: true
+                }
+            }
+            case CLOSE_ORDER_MODAL :{
+                return{
+                    ...state,
+                    order: payload,
+                    loading:false,
+                    show: false
+                }
+            }
             case ORDERS_ERROR:
                     return {
                       ...state,

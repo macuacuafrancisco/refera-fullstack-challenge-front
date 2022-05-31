@@ -17,3 +17,6 @@ export const ORDER_ERROR='ORDER_ERROR';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 
+export const SHOW_ORDER_MODAL='SHOW_ORDER_MODAL';
+export const CLOSE_ORDER_MODAL='CLOSE_ORDER_MODAL';
+

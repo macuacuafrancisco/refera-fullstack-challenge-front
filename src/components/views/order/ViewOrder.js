@@ -1,38 +1,27 @@
-import React, {  Fragment, useState, useEffect } from 'react';
+import React, {  Fragment, useState, useEffect, Button } from 'react';
 import {getCategories} from '../../../redux/actions/category'
-import {getOrder, updateOrder} from '../../../redux/actions/order'
+import {getOrder, updateOrder, closeOrderModal} from '../../../redux/actions/order'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../shared/Spinner';
 import {useParams, Link, useHistory} from 'react-router-dom'
-import { Button, Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap'
 
 const UpdateOrder = ({
     getOrder,
     updateOrder,   
     order :{order, loading},
     getCategories,
-    category : {categories}
+    category : {categories},
+    closeOrderModal
 })=> {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = (id) => setShow(true);
-    
     const { id } = useParams();
-   
-    useEffect(()=>{
-        getCategories();   
-     },[getCategories])
-
+    
    useEffect(()=>{
         getOrder(id);
    },[])
 
-   useEffect(()=>{
-    setValues(order)   
-},[order])
-
+ 
    const [values, setValues]= useState(order);
    const history= useHistory()
 
@@ -48,21 +37,7 @@ const UpdateOrder = ({
        
    return(
     <Fragment>
-    {
-    loading || order === null ? (
-      <Spinner />
-    ) : (
-        <Fragment>                     
-                        <Modal show={show} onHide={handleClose}>
-                            <Modal.Header closeButton>
-                            <Modal.Title>View Order</Modal.Title>
-                            </Modal.Header>
-                              <Modal.Body>   
-         <Button variant="primary" onClick={()=>{window.location=`/orders`}}>
-                          Back
-                           </Button>
-
-        <form 
+         <form 
            onSubmit={e=>{                
                         e.preventDefault();
                         executeUpdate({
@@ -72,7 +47,12 @@ const UpdateOrder = ({
                         window.location.reload() 
                     }}>   
         
-        <div>
+                    <div>
+                    <Modal.Dialog>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Modal title</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
                         <label>
                                 CATEGORY:<br/>                               
                                 <select name="category" onChange={handleChange}>
@@ -107,6 +87,13 @@ const UpdateOrder = ({
                                 DEADLINE:<br/>
                                 <input type="text" name="deadline" onChange={handleChange} value={values.deadline} />
                         </label> 
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={closeOrderModal}>
+                            Close
+                        </Button>                       
+                        </Modal.Footer>
+                   </Modal.Dialog>
                    </div> 
 
 
@@ -115,20 +102,7 @@ const UpdateOrder = ({
                  <input type="submit" className="btn btn-dark my-1" value="Update Order " />  
            </div>
 
-        </form>        
-        </Modal.Body>
-                            <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                Close
-                            </Button>
-                            <Button variant="primary" onClick={handleClose}>
-                                Save Changes
-                            </Button>
-                            </Modal.Footer>
-                        </Modal>   
-                    </Fragment>
-     
-      )}
+        </form>     
     </Fragment>  
    )
 
@@ -138,8 +112,9 @@ const UpdateOrder = ({
 
 UpdateOrder.propTypes = {
     getCategories: PropTypes.func.isRequired,   
-     getOrder: PropTypes.func.isRequired,  
-    updateOrder: PropTypes.func.isRequired,   
+    getOrder: PropTypes.func.isRequired,  
+    updateOrder: PropTypes.func.isRequired, 
+    closeOrderModal: PropTypes.func.isRequired, 
     order: PropTypes.object.isRequired
 }
 
@@ -148,4 +123,4 @@ const mapStateToProps = (state)=>({
    category: state.category
 })
 
-export default connect(mapStateToProps, {getOrder,updateOrder, getCategories})(UpdateOrder);
+export default connect(mapStateToProps, {getOrder,updateOrder, getCategories, closeOrderModal})(UpdateOrder);

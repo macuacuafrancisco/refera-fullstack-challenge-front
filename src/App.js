@@ -6,7 +6,7 @@ import Header from './components/layout/Header';
 import {Provider} from 'react-redux'
 import store from './redux/store'
 import Routes from './components/routing/Routes';
-import ListCategories from './components/views/category/ListCategories'
+import ListOrders from './components/views/order/ListOrders';
 
 function App() {
    return (
@@ -17,7 +17,7 @@ function App() {
                   <Container>              
                             <Router>                
                                      <Switch>
-                                          <Route exact path="/" component={ListCategories} /> 
+                                          <Route exact path="/" component={ListOrders} /> 
                                           <Route component={Routes} />
                                       </Switch>                          
                             </Router>          
