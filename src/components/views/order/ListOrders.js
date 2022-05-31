@@ -136,20 +136,28 @@ const ListOrders = ({
                 )   
                 }             
                </Fragment>
-               <Fragment>                     
+               <Fragment>   
+                                          
                         <Modal show={showOrder} onHide={handleCloseOrder}>
                             <Modal.Header closeButton>
                             <Modal.Title>View Order</Modal.Title>
                             </Modal.Header>
-                              <Modal.Body>                             
-                                                        {order._id}                                         
+                               <Modal.Body>  
+                              {
+                                loading || order === null ? (
+                                <>LOADING...</>
+                                ) : ( <>
+                                                     {order._id}                                         
                                                         {order.category}
                                                       {order.contactName}
                                                         {order.contactPhone}
                                                        {order.agency}
                                                        {order.company}
-                                                       {order.deadline}                                 
+                                                       {order.deadline}  
+                                </>                                             
+                                 )}                                
                               </Modal.Body>
+                            
                             <Modal.Footer>                        
                             <Button variant="warning" onClick={()=>{handleShowEditOrder(order._id)}}>
                                 Update
@@ -161,15 +169,22 @@ const ListOrders = ({
                                 Close
                             </Button>
                             </Modal.Footer>
-                        </Modal>   
+                        </Modal>  
+                     
                     </Fragment>
-                    <Fragment>                     
+
+
+                    <Fragment>   
+                                      
                         <Modal show={showEditOrder} onHide={handleCloseEditOrder}>
                             <Modal.Header closeButton>
-                            <Modal.Title>View Order</Modal.Title>
-                            </Modal.Header>
+                            <Modal.Title>Edit Order</Modal.Title>
+                            </Modal.Header>                            
                               <Modal.Body>   
-                                                               
+                              {
+                            loading || order === null ? (
+                            <>LOADING...</>
+                            ) : (                         
                                 <div>
                                                 <label>
                                                         CATEGORY:<br/>                               
@@ -207,8 +222,8 @@ const ListOrders = ({
                                                         <DatePicker selected={startDate} onChange={(date) => handleDataChange(date)} />
                                                 </label>
                                         </div>                              
-                               
-                                </Modal.Body>
+                               )} 
+                                </Modal.Body>   
                                                     <Modal.Footer>                                                   
                                                     <Button variant="primary" onClick={handlePersisteOrder}>
                                                         Save
@@ -218,6 +233,7 @@ const ListOrders = ({
                                                     </Button>
                                                     </Modal.Footer>
                                                 </Modal>   
+                              
                             </Fragment>
                             
                      </Fragment>
