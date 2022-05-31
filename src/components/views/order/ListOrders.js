@@ -11,7 +11,7 @@ import {Link, useHistory} from 'react-router-dom'
 
 const ListOrders = ({
     getOrders, 
-    order : {orders, order, loading},
+    order : {orders, order, loading, },
     deleteOrder,
     getOrder,  
     getCategories,
@@ -25,16 +25,17 @@ const ListOrders = ({
     const [showEditOrder, setShowEditOrder] = useState(false);
 
     const handleCloseOrder = () => setShowOrder(false);
-    const handleCloseEditOrder = () => setShowEditOrder(false);
+    const handleCloseEditOrder = () => {setShowEditOrder(false);
+                setIsNew(false)
+    }
+
+    const [isNew,setIsNew] = useState(false)
 
     const handlePersisteOrder =() => {
         executeUpdate({
             values
-        })                                               
-        setValues('');
-        history.push('/orders');
-        window.location.reload() 
-    }
+        })                                           
+       }
 
     const handleShowOrder = (id) => {
         getOrder(id)
@@ -67,13 +68,19 @@ const ListOrders = ({
     
 
     const executeUpdate = ( values)=>{
-        if(order!==null){
-            updateOrder(order._id,values )
+       
+        if(isNew){  
+            console.log('is new')        
+            createOrder(values ) 
+            setValues(''); 
         }else{
-            createOrder({values }) 
+            console.log('is not new')        
+            updateOrder(order._id,values )
             setValues(''); 
         }       
-     
+        // history.push('/orders');
+        //  window.location.reload() 
+        // setIsNew(false)
      }
  
            
@@ -83,6 +90,7 @@ const ListOrders = ({
 
 
     const handleNewOrder =()=>{
+         setIsNew(true)
          setValues('')   
          setShowEditOrder(true);
      }
@@ -147,13 +155,13 @@ const ListOrders = ({
                                 loading || order === null ? (
                                 <>LOADING...</>
                                 ) : ( <>
-                                                     {order._id}                                         
-                                                        {order.category}
-                                                      {order.contactName}
-                                                        {order.contactPhone}
-                                                       {order.agency}
-                                                       {order.company}
-                                                       {order.deadline}  
+                                                 <p/> <div>ID:  {order._id}      </div>  <br/>                                  
+                                                 <p/> <div> CATEGORY:    {order.category} </div>  <br/>    
+                                                 <p/> <div>  CONTACT NAME:  {order.contactName} </div> <br/>     
+                                                 <p/> <div>  CONTACT PHONE:    {order.contactPhone} </div> <br/>     
+                                                 <p/> <div>  AGENCY:  {order.agency} </div> <br/>     
+                                                  <p/> <div>  COMPANY:  {order.company} </div> <br/>     
+                                                  <p/>  <div>  DEADLINE:  {order.deadline}   </div>   <br/>   
                                 </>                                             
                                  )}                                
                               </Modal.Body>
@@ -178,7 +186,7 @@ const ListOrders = ({
                                       
                         <Modal show={showEditOrder} onHide={handleCloseEditOrder}>
                             <Modal.Header closeButton>
-                            <Modal.Title>Edit Order</Modal.Title>
+                            <Modal.Title>Save Order</Modal.Title>
                             </Modal.Header>                            
                               <Modal.Body>   
                               {
@@ -186,7 +194,7 @@ const ListOrders = ({
                             <>LOADING...</>
                             ) : (                         
                                 <div>
-                                                <label>
+                                               <div> <label>
                                                         CATEGORY:<br/>                               
                                                         <select name="category" onChange={handleChange}>
                                                             <option >{values.category}</option>
@@ -197,30 +205,41 @@ const ListOrders = ({
                                                             }                                
                                                         </select>
                                                 </label> 
+                                                </div>
                                             
-                                                <label>
+                                                <div> 
+                                                    <label>
                                                         CONTACT NAME:<br/>
                                                         <input type="text" name="contactName" onChange={handleChange} value={values.contactName} />
                                                 </label> 
+                                                </div>
 
-                                                <label>
+                                                <div>
+                                                    <label>
                                                         CONTACT PHONE:<br/>
                                                         <input type="text" name="contactPhone" onChange={handleChange} value={values.contactPhone} />
-                                                </label> 
+                                                </label>
+                                                 </div>
 
-                                                <label>
+                                                <div> 
+                                                    <label>
                                                         AGENCY:<br/>
                                                         <input type="text" name="agency" onChange={handleChange} value={values.agency} />
-                                                </label> 
-                                                <label>
+                                                </label>
+                                                </div> 
+                                                <div> 
+                                                    <label>
                                                         COMPANY:<br/>
                                                         <input type="text" name="company" onChange={handleChange} value={values.company} />
                                                 </label> 
+                                                </div>
                                                
-                                                <label>
-                                                       DEADLINE:<br/>
-                                                        <DatePicker selected={values.deadline} onChange={(date) => handleDataChange(date)} />
+                                                <div>   <label>
+                                                       DEADLINE(mm/dd/yyyy):<br/>
+                                                       {isNew && <input type="text" name="deadline" onChange={handleChange} value={values.deadline}  />}
+                                                       {!isNew && <DatePicker selected={startDate} onChange={(date) => handleDataChange(date)} />}
                                                 </label>
+                                                 </div>
                                         </div>                              
                                )} 
                                 </Modal.Body>   
